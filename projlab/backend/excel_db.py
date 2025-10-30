@@ -6,7 +6,6 @@ from typing import Any, Dict, List
 from zipfile import BadZipFile
 import pandas as pd
 
-# ====== EXCEL FAILA CEĻŠ (pēc noklusējuma uz proj lab.xlsx projekta saknē) ======
 _default_xlsx = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "proj lab.xlsx"))
 XLSX_PATH = os.environ.get("XLSX_PATH", _default_xlsx)
 
@@ -20,26 +19,15 @@ SHEETS = [
     "meta",
 ]
 
-
 def _now_iso() -> str:
     return dt.datetime.utcnow().isoformat(timespec="seconds")
 
-
 def _ensure_dir_for(path: str) -> None:
-    """Droši izveido mapi, ja tā ir norādīta ceļā."""
     d = os.path.dirname(path)
     if d and not os.path.exists(d):
         os.makedirs(d, exist_ok=True)
 
-
 class ExcelDB:
-    """
-    Excel datu slānis:
-    - nolasa/raksta lapas ar pandas (openpyxl engine)
-    - auto-increment caur 'meta' lapu
-    - rakstīšanas brīdī lieto procesa līmeņa Lock
-    - prot atgūties, ja XLSX ir bojāts (BadZipFile / u.c. gadījumi)
-    """
     _lock = threading.Lock()
 
     def __init__(self, path: str = XLSX_PATH):
@@ -49,7 +37,6 @@ class ExcelDB:
         else:
             self._ensure_sheets()
 
-    # ---------- palīgmetodes ----------
     def _init_empty(self) -> None:
         _ensure_dir_for(self.path)
         data = {
@@ -81,20 +68,18 @@ class ExcelDB:
                 df.to_excel(w, sheet_name=name, index=False)
 
     def _read_all(self) -> Dict[str, pd.DataFrame]:
-        """Nolasa visas lapas; bojāta/nelasāma XLSX gadījumā reinitializē tukšu struktūru."""
         try:
             return pd.read_excel(self.path, sheet_name=None, engine="openpyxl")
         except (FileNotFoundError, BadZipFile, KeyError, ValueError):
-            # Atjaunojam tukšu, ja fails bojāts vai neeksistē
+            # Atjauno tukšu, ja fails bojāts vai neeksistē
             self._init_empty()
             return pd.read_excel(self.path, sheet_name=None, engine="openpyxl")
 
     def _write_all(self, book: Dict[str, pd.DataFrame]) -> None:
-        """Droša saglabāšana: sagatavo DF, izveido mapi, atkārto, ja fails īslaicīgi bloķēts."""
         import time
         _ensure_dir_for(self.path)
 
-        # normalizējam datu struktūru
+        # normalizē datu struktūru
         safe_book: Dict[str, pd.DataFrame] = {}
         for name in SHEETS:
             df = book.get(name)
@@ -111,13 +96,12 @@ class ExcelDB:
                 return
             except PermissionError as e:
                 last_err = e
-                time.sleep(0.5)  # iespējams, Excel/OneDrive īslaicīgi tur vaļā
+                time.sleep(0.5)  
         if last_err:
             raise last_err
         raise RuntimeError("Failed to write Excel workbook")
 
     def _ensure_sheets(self) -> None:
-        """Pārliecinās, ka visas nepieciešamās lapas eksistē; ja nav – izveido un saglabā."""
         with self._lock:
             book = self._read_all()
             changed = False
@@ -149,7 +133,6 @@ class ExcelDB:
         book["meta"] = meta
         return val
 
-    # ---------- publiskās metodes ----------
     # PRINTERI
     def list_printers(self) -> List[Dict[str, Any]]:
         with self._lock:
@@ -214,7 +197,6 @@ class ExcelDB:
 
     # PLĀNS
     def save_plan_rows(self, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Saglabā plāna rindas un atjauno pasūtījumu statusu uz PLANNED."""
         if not rows:
             return []
         with self._lock:

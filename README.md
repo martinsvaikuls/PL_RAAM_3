@@ -85,15 +85,20 @@ a
 ### Novērtēšanas plāns
 
 Ieejas parametri:
+
 A - krekla izmērs (S M L XL)
 B - krāsa (gaiša, tumša)
 C - N kreklu daudzums
 D - krekla bilde (gaiša, tumša)
 
 Pasūtījuma veidi:
+
 A - A(S), B(gaiša), C(100,1000,10000), D(tumša)
+
 B - A(S), B(tumša), C(100,1000,10000), D(gaiša)
+
 C - A(XL), B(tumša), C(100,1000,10000), D(tumša)
+
 D - A(XL), B(gaiša), C(100,1000,10000), D(gaiša)
 
 

@@ -67,7 +67,15 @@ a
 a
 
 ### Tehnologiju steks
-a
+| a | b |
+|----|---------------------|
+| FrontEnd  | 100          |
+| BackEnd  | PythonFlask   |
+| Datubāze  | google Sheets  |
+| Serveris  | Linux Ubunut   |
+| Versiju kontrole  | Github             |
+
+
 
 ### Programmatūras apraksts
 a
@@ -75,7 +83,28 @@ a
 ## NOVĒRTĒJUMS
 
 ### Novērtēšanas plāns
-a
+
+Ieejas parametri:
+A - krekla izmērs (S M L XL)
+B - krāsa (gaiša, tumša)
+C - N kreklu daudzums
+D - krekla bilde (gaiša, tumša)
+
+Pasūtījuma veidi:
+A - A(S), B(gaiša), C(100,1000,10000), D(tumša)
+B - A(S), B(tumša), C(100,1000,10000), D(gaiša)
+C - A(XL), B(tumša), C(100,1000,10000), D(tumša)
+D - A(XL), B(gaiša), C(100,1000,10000), D(gaiša)
+
+
+| NR | N Kreklu daudzums | Pasūtījuma veids | Vid. Peļņa par kreklu (eur) | Laiks (min) |
+|----|-------------------|------------------|-----------------------|-------|
+| 1  | 100               |        A          |                       |       |
+| 2  | 1 000             |         A         |                       |       |
+| 3  | 10 000            |          A        |                       |       |
+| 4  | 100               |           B       |                       |       |
+| 5  | 1 000             |            B      |                       |       |
+| 6  | 10 000            |             B     |                       |       |
 
 ### Novērtēšanas rezultāti
 a

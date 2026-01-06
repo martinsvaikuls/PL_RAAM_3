@@ -1,6 +1,6 @@
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 import datetime as dt
 
 # Helper function to get the current time in ISO format
@@ -218,3 +218,22 @@ class GoogleSheetsDB:
         self._append_to_sheet("fulfillment_plan", rows)
 
         return rows
+
+    # CLIENTS
+    def list_clients(self) -> List[Dict[str, Any]]:
+        return self.get_sheet_data("clients")
+
+    def get_client_by_email(self, email: str) -> Optional[Dict[str, Any]]:
+        clients = self.list_clients()
+        return next((client for client in clients if client.get("email") == email), None)
+
+    def create_client(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        new_id = self._next_id("clients")
+        client_data = {
+            "id": new_id,
+            "client_name": payload["client_name"],
+            "email": payload["email"],
+            "hash_password": payload["hash_password"]
+        }
+        self._append_to_sheet("clients", [client_data])
+        return client_data

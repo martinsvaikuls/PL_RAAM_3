@@ -87,19 +87,7 @@ class GoogleSheetsDB:
         #Get all data from a default range in the spreadsheet
         return self.get_sheet_data("Sheet1")  # Default to Sheet1, you can modify as needed
 
-    def _write_sheet_data(self, sheet_name: str, data: List[Dict[str, Any]]) -> None:
-        """Write data to a specific sheet."""
-        range_name = f"{sheet_name}!A1"
-        headers = list(data[0].keys()) if data else []
-        values = [headers] + [list(item.values()) for item in data]
-
-        body = {
-            'values': values
-        }
-
-        # Write data to Google Sheets
-        self.service.spreadsheets().values().update(
-            spreadsheetId=self.SPREADSHEET_ID, range=range_name, valueInputOption="RAW", body=body).execute()
+    
 
     def _append_to_sheet(self, sheet_name: str, data: List[Dict[str, Any]]) -> None:
         """Append new rows to a specific sheet."""
@@ -114,12 +102,61 @@ class GoogleSheetsDB:
         self.service.spreadsheets().values().append(
             spreadsheetId=self.SPREADSHEET_ID, range=range_name, valueInputOption="RAW", body=body).execute()
 
+    def update_objects(self, sheet_name: str, updates: List[Dict[str, Any]]) -> bool:
+        """Update multiple objects (e.g., printers, orders) by their IDs in the given sheet."""
+        data = self.get_sheet_data(sheet_name)
+        
+        # Create a dictionary of objects by ID for easier lookup
+        id_dict = {item['id']: item for item in data}
+
+        for update in updates:
+            obj_id = update.get("id") # gets row id
+            
+            if obj_id in id_dict: # checks if row is in dict
+                obj = id_dict[obj_id]
+                for key, value in update.items():
+                    if key != "id" and key in obj:
+                        obj[key] = value
+                id_dict[obj_id] = obj
+                print(f"Updated object with ID {obj_id} in '{sheet_name}'.")
+            else:
+                print(f"ERR Object with ID {obj_id} not found in '{sheet_name}'.")
+        
+        # Write the updated data back to the sheet
+        #print("new sheet")
+        #print(id_dict)
+        new_sheet = []
+        for key, value in id_dict.items():
+            new_sheet.append(value)
+
+        #print("new sheet")
+        #print(new_sheet)
+        self._write_sheet_data(sheet_name, new_sheet)
+        return True
+    
+    def _write_sheet_data(self, sheet_name: str, data: List[Dict[str, Any]]) -> None:
+        """Write data to a specific sheet."""
+        range_name = f"{sheet_name}!A1"
+        headers = list(data[0].keys()) if data else []
+        values = [headers] + [list(item.values()) for item in data]
+
+        body = {
+            'values': values
+        }
+
+        # Write data to Google Sheets
+        #print("values")
+        #print(values)
+        self.service.spreadsheets().values().update(
+            spreadsheetId=self.SPREADSHEET_ID, range=range_name, valueInputOption="RAW", body=body).execute()
+
     def _next_id(self, table: str) -> int:
         """Get the next ID for a specific table by reading the 'meta' sheet."""
         meta_data = self.get_sheet_data("meta")
         key = f"next_id_{table}"
         meta_entry = next((entry for entry in meta_data if entry['key'] == key), None)
-        
+        #print(meta_entry)
+        #print(meta_data)
         if meta_entry is None:
             # Add the entry if it doesn't exist
             self._append_to_sheet("meta", [{"key": key, "value": 1}])
@@ -127,7 +164,12 @@ class GoogleSheetsDB:
        
         current_id = int(meta_entry["value"])
         # Increment the ID for the next usage
-        self._write_sheet_data("meta", [{"key": key, "value": current_id + 1}])
+        for item in meta_data:
+            if item["key"] == key:
+                item["value"] = str(int(item["value"]) +1)
+                break
+        
+        self._write_sheet_data("meta", meta_data)
         return current_id
 
     # PRINTERS
@@ -152,11 +194,11 @@ class GoogleSheetsDB:
             orders = [order for order in orders if order["status"] == status]
         return orders
 
-    def create_order(self, payload: Dict[str, Any], client_id: int) -> Dict[str, Any]:
+    def create_order(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         new_id = self._next_id("orders")
         order_data = {
             "id": new_id,
-            "client_id": client_id,
+            "client_id": payload["client_id"],
             "shirt_size": payload["shirt_size"],
             "base_color": payload["base_color"],
             "attachment": payload.get("attachment", ""),
@@ -174,4 +216,5 @@ class GoogleSheetsDB:
         for row in rows:
             row["id"] = self._next_id("fulfillment_plan")
         self._append_to_sheet("fulfillment_plan", rows)
+
         return rows

@@ -15,6 +15,7 @@ Kreklu apdrukas uzņēmums saņem pasūtījumus, katrā no tiem ir:
 - daudzums;
 - pasūtījuma izpildes termiņš.
 
+
 Ir pieejamas vairākas apdrukas iekārtas, katra ar savu veiktspēju un izmaksu lielumu, tāpēc jāplāno resursu patēriņš tā, lai ievērotu termiņu, izpildītu pasūtījumu pilnvērtīgi un samazinātu izmaksas un apdrukas iekārtu gaidīšanu. Rezultātā ir jāatrod optimālais pasūtījumu izpildes plāns, kurš nosaka, kā jādarbina iekārtas, lai sasniegtu šo mērķi.
 
 ### Darba un novērtēšanas mērķis
@@ -23,7 +24,7 @@ Ir pieejamas vairākas apdrukas iekārtas, katra ar savu veiktspēju un izmaksu 
 Izveidot risinājumu problēmai, veicot analīzi par esošajiem risinājumiem, algoritmiem, tehnoloģijas stekiem.
 
 #### Novērtēšanas mērķis
-Kas tas ir
+
 
 ## LĪDZĪGO RISINĀJUMU PĀRSKATS
 

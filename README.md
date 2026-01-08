@@ -24,7 +24,7 @@ Ir pieejamas vairākas apdrukas iekārtas, katra ar savu veiktspēju un izmaksu 
 Izveidot risinājumu problēmai, veicot analīzi par esošajiem risinājumiem, algoritmiem, tehnoloģijas stekiem.
 
 #### Novērtēšanas mērķis
-
+Novērtēt pasūtījuma izpildes plāna efektivitāti, balstoties uz iekārtu vidējo noslodzi un pasūtījumu gaidīšanas laiku, atkarībā no pasūtījumu apjoma un iekārtu skaita.
 
 ## LĪDZĪGO RISINĀJUMU PĀRSKATS
 
@@ -85,7 +85,6 @@ a
 
 ### Novērtēšanas plāns
 
-Mērķis: Novērtēt pasūtījuma izpildes plāna efektivitāti, balstoties uz iekārtu vidējo noslodzi un pasūtījumu gaidīšanas laiku, atkarībā no pasūtījumu apjoma un iekārtu skaita.
 Ieejas mainīgie: Pasūtījumu skaits, pieejamo iekārtu skaits.
 Novērtēšanas mēri:
 	-Vidējais pasūtījuma gaidīšanas laiks;

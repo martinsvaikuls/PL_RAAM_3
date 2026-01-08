@@ -69,12 +69,12 @@ a
 
 ### Tehnologiju steks
 | a | b |
-|----|---------------------|
-| FrontEnd  | 100          |
-| BackEnd  | PythonFlask   |
-| Datubāze  | google Sheets  |
-| Serveris  | Linux Ubunut   |
-| Versiju kontrole  | Github             |
+|-------------------|----------------|
+| FrontEnd          | 100            |
+| BackEnd           | PythonFlask    |
+| Datubāze          | google Sheets  |
+| Serveris          | Linux Ubunut   |
+| Versiju kontrole  | Github         |
 
 
 

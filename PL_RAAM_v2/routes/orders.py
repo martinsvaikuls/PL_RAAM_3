@@ -23,7 +23,7 @@ def create_order():
     
     rows = []
     for order_payload in listPayload:
-        need = ["shirt_size", "base_color", "quantity"]
+        need = ["product","shirt_size", "base_color", "quantity"]
         missing = [k for k in need if k not in order_payload]
         if missing:
             return jsonify({"error": f"Missing: {', '.join(missing)}"}), 400

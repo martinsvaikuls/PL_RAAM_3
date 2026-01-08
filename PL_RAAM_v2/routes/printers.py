@@ -12,7 +12,7 @@ def list_printers():
 def create_printer():
     """Create a new printer."""
     payload = request.get_json() or {}
-    required_fields = ["model", "base_speed", "available_from"]
+    required_fields = ["model", "base_speed"]
     missing_fields = [field for field in required_fields if field not in payload]
 
     if missing_fields:

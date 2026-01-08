@@ -1,17 +1,20 @@
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
+
 from routes.orders import bp as orders_bp
 from routes.planning import bp as planning_bp
 from routes.printers import bp as printers_bp
 from routes.clients import bp as clients_bp
+from routes.items import bp as items_bp
+
 import json
 import os
 
 from sheets_DB import GoogleSheetsDB
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
-config_file = os.path.join(current_dir, r'credentials\google_ID.json')
-SERVICE_ACCOUNT_FILE = os.path.join(current_dir, r'credentials\client_cred.json')
+config_file = os.path.join(current_dir, "credentials","google_ID.json")
+SERVICE_ACCOUNT_FILE = os.path.join(current_dir, "credentials","client_cred.json")
 
 # Try to load config, use placeholder for POC if not available
 try:
@@ -66,8 +69,12 @@ def create_app() -> Flask:
     app.register_blueprint(orders_bp)
     app.register_blueprint(planning_bp)
     app.register_blueprint(clients_bp)
+    app.register_blueprint(items_bp)
     return app
 
+app = create_app()
+
 if __name__ == "__main__":
-    app = create_app()
+    # Only for local dev
     app.run(debug=True)
+

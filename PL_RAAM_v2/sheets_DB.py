@@ -199,6 +199,7 @@ class GoogleSheetsDB:
         order_data = {
             "id": new_id,
             "client_id": payload["client_id"],
+            "product": payload["product"],
             "shirt_size": payload["shirt_size"],
             "base_color": payload["base_color"],
             "attachment": payload.get("attachment", ""),
@@ -210,6 +211,13 @@ class GoogleSheetsDB:
         return order_data
 
     # FULFILLMENT PLAN
+    def list_plans(self, order: str | None = None) -> List[Dict[str, Any]]:
+        plans = self.get_sheet_data("fulfillment_plan")
+
+        if order:
+            plans = [plan for plan in plans if plan["order_id"] == order]
+        return plans
+
     def save_plan_rows(self, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if not rows:
             return []
@@ -237,3 +245,28 @@ class GoogleSheetsDB:
         }
         self._append_to_sheet("clients", [client_data])
         return client_data
+    
+    # ITEMS
+    def list_items(self) -> List[Dict[str, Any]]:
+        return self.get_sheet_data("items")
+    
+    """
+    def get_items(self, product: str, size: str) -> Dict[str]:
+        orders = self.get_sheet_data("orders")
+        if status:
+            orders = [order for order in orders if order["status"] == status]
+        return orders
+    """ 
+    def create_item(self, payload: Dict[str, Any]):
+        new_id = self._next_id("items")
+        item_data = {
+            "id": new_id,
+            "product": payload["product"],
+            "size": payload["size"],
+            "cost": payload["cost"],
+            "cost_material": payload["cost_material"],
+            "attachment_link":payload.get("attachment_link", ""),
+            "created_at": _now_iso(),
+        }
+        self._append_to_sheet("items", [item_data])
+        return item_data

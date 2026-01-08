@@ -1,8 +1,3 @@
-Grupas Projekts
-
-Projekta Apraksts (Visjaunākā versija, jo vieglāk kopā strādāt):
-https://docs.google.com/document/d/1RupNSbhbTdmFWhBfS7ib3eVyIZ9KbkIEJG7z2fsYb4Q/edit?usp=sharing
-
 # PROJEKTĒŠANAS PĀRSKATS
 
 ## IEVADS
@@ -58,9 +53,6 @@ Atsķirībā no iepriekšējiem uzņēmumiem CopyPro darbojas kā tiešs drukas 
 
 ## TEHNISKAIS RISINĀJUMS
 
-### Prasības
-a
-
 ### Algoritms
 ![alt text](https://github.com/martinsvaikuls/PL_RAAM_3/blob/front-end/PicturesForREADME/blokshema.png?raw=true)
 
@@ -75,11 +67,6 @@ a
 | Datubāze  | google Sheets  |
 | Serveris  | Linux Ubunut   |
 | Versiju kontrole  | Github             |
-
-
-
-### Programmatūras apraksts
-a
 
 ## NOVĒRTĒJUMS
 
@@ -98,5 +85,3 @@ Novērtēšanas mēri:
 
 ### Novērtēšanas rezultāti
 Aplūkojot testu rezultātus, var redzēt, ka algoritms iekārtu noslodzi kontrolē ar augtu efektivitāti, visos testos virs 95%. Tomēr pie milzīga pasūtījumu skaita (1000) iekārtu noslodze pietuvojas ļoti tuvu robežai, 99.57%, un ņemot vērā gaidīšanas darbu izpildes sākumā un beigās, var pieņemt, ka pie 1000 pasūtījumiem tiek sasniegts teorētisks limits sistēmai, uz ko norāda arī straujāks pieaugums gaidīšanas laikam, ar vidējo laiku sasniedzam 9741.75 min, jeb aptuveni 6.7 dienas, pat ar palielinātu printeru skaitu. Aplūkojot pārējos gaidīšanas laikus, 1. gadījumā tas sasniedz nieka 568.22 min, jeb 0.39 dienas, bet 2. gadījumā tas sasniedz nu jau daudz augstāku 2325.96 min, jeb 1.61 dienu, kas ir aptuveni četru reižu pieaugums. Lai uzlabotu gaidīšanas laiku, vajadzētu palielināt printeru skaitu, vai izmantot printerus ar augstākiem printēšanas ātrumiem.
-
-## SECINĀJUMI

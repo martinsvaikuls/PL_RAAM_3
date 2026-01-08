@@ -60,13 +60,13 @@ Atsķirībā no iepriekšējiem uzņēmumiem CopyPro darbojas kā tiešs drukas 
 ![alt text](https://github.com/martinsvaikuls/PL_RAAM_3/blob/front-end/PicturesForREADME/KonceptuModelis.png?raw=true)
 
 ### Tehnologiju steks
-| a | b |
-|----|---------------------|
-| FrontEnd  | Javascript          |
-| BackEnd  | PythonFlask   |
-| Datubāze  | google Sheets  |
-| Serveris  | Linux Ubunut   |
-| Versiju kontrole  | Github             |
+| Tehnoloģija | Tehnologijas nosaukums |
+|-------------------|----------------|
+| FrontEnd          | Javascript     |
+| BackEnd           | PythonFlask    |
+| Datubāze          | Google Sheets  |
+| Serveris          | Azure Web App  |
+| Versiju kontrole  | GitHub         |
 
 ## NOVĒRTĒJUMS
 

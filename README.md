@@ -1,8 +1,3 @@
-Grupas Projekts
-
-Projekta Apraksts (Visjaunākā versija, jo vieglāk kopā strādāt):
-https://docs.google.com/document/d/1RupNSbhbTdmFWhBfS7ib3eVyIZ9KbkIEJG7z2fsYb4Q/edit?usp=sharing
-
 # PROJEKTĒŠANAS PĀRSKATS
 
 ## IEVADS
@@ -24,7 +19,7 @@ Ir pieejamas vairākas apdrukas iekārtas, katra ar savu veiktspēju un izmaksu 
 Izveidot risinājumu problēmai, veicot analīzi par esošajiem risinājumiem, algoritmiem, tehnoloģijas stekiem.
 
 #### Novērtēšanas mērķis
-
+Novērtēt pasūtījuma izpildes plāna efektivitāti, balstoties uz iekārtu vidējo noslodzi un pasūtījumu gaidīšanas laiku, atkarībā no pasūtījumu apjoma un iekārtu skaita.
 
 ## LĪDZĪGO RISINĀJUMU PĀRSKATS
 
@@ -58,17 +53,14 @@ Atsķirībā no iepriekšējiem uzņēmumiem CopyPro darbojas kā tiešs drukas 
 
 ## TEHNISKAIS RISINĀJUMS
 
-### Prasības
-a
-
 ### Algoritms
-a
+![alt text](https://github.com/martinsvaikuls/PL_RAAM_3/blob/front-end/PicturesForREADME/blokshema.png?raw=true)
 
 ### Konceptu modelis
-a
+![alt text](https://github.com/martinsvaikuls/PL_RAAM_3/blob/front-end/PicturesForREADME/KonceptuModelis.png?raw=true)
 
 ### Tehnologiju steks
-| a | b |
+| Tehnoloģija | Tehnologijas nosaukums |
 |-------------------|----------------|
 | FrontEnd          | Javascript     |
 | BackEnd           | PythonFlask    |
@@ -76,43 +68,20 @@ a
 | Serveris          | Azure Web App  |
 | Versiju kontrole  | GitHub         |
 
-
-
-### Programmatūras apraksts
-a
-
 ## NOVĒRTĒJUMS
 
 ### Novērtēšanas plāns
 
-Ieejas parametri:
+Ieejas mainīgie: Pasūtījumu skaits, pieejamo iekārtu skaits.
+Novērtēšanas mēri:
+	-Vidējais pasūtījuma gaidīšanas laiks;
+	-Vidējā kopējā ierīču noslodze;
 
-A - krekla izmērs (S M L XL)
-B - krāsa (gaiša, tumša)
-C - N kreklu daudzums
-D - krekla bilde (gaiša, tumša)
-
-Pasūtījuma veidi:
-
-A - A(S), B(gaiša), C(100,1000,10000), D(tumša)
-
-B - A(S), B(tumša), C(100,1000,10000), D(gaiša)
-
-C - A(XL), B(tumša), C(100,1000,10000), D(tumša)
-
-D - A(XL), B(gaiša), C(100,1000,10000), D(gaiša)
-
-
-| NR | N Kreklu daudzums | Pasūtījuma veids | Vid. Peļņa par kreklu (eur) | Laiks (min) |
-|----|-------------------|------------------|-----------------------|-------|
-| 1  | 100               |        A          |                       |       |
-| 2  | 1 000             |         A         |                       |       |
-| 3  | 10 000            |          A        |                       |       |
-| 4  | 100               |           B       |                       |       |
-| 5  | 1 000             |            B      |                       |       |
-| 6  | 10 000            |             B     |                       |       |
+| Nr. | Pasūtījumu skaits | Printeru skaits | Algoritma ātrums, s | Gaidīšanas laiks, min | Iekārtu noslodze, % |
+|-----|-------------------|-----------------|---------------------|-----------------------|---------------------|
+| 1.  | 10                | 2               | 0.0025              | 568.22                | 95.45               |
+| 2.  | 100               | 5               | 0.0090              | 2325.96               | 98.10               |
+| 3.  | 1000              | 10              | 0.1429              | 9741.75               | 99.57               |
 
 ### Novērtēšanas rezultāti
-a
-
-## SECINĀJUMI
+Aplūkojot testu rezultātus, var redzēt, ka algoritms iekārtu noslodzi kontrolē ar augtu efektivitāti, visos testos virs 95%. Tomēr pie milzīga pasūtījumu skaita (1000) iekārtu noslodze pietuvojas ļoti tuvu robežai, 99.57%, un ņemot vērā gaidīšanas darbu izpildes sākumā un beigās, var pieņemt, ka pie 1000 pasūtījumiem tiek sasniegts teorētisks limits sistēmai, uz ko norāda arī straujāks pieaugums gaidīšanas laikam, ar vidējo laiku sasniedzam 9741.75 min, jeb aptuveni 6.7 dienas, pat ar palielinātu printeru skaitu. Aplūkojot pārējos gaidīšanas laikus, 1. gadījumā tas sasniedz nieka 568.22 min, jeb 0.39 dienas, bet 2. gadījumā tas sasniedz nu jau daudz augstāku 2325.96 min, jeb 1.61 dienu, kas ir aptuveni četru reižu pieaugums. Lai uzlabotu gaidīšanas laiku, vajadzētu palielināt printeru skaitu, vai izmantot printerus ar augstākiem printēšanas ātrumiem.

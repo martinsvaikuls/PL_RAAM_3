@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Shirt Store - POC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-section">
+                <div class="logo">🎨</div>
+                <div>
+                    <h1>RAAM Store</h1>
+                    <p class="tagline">Premium Designs, Premium Quality</p>
+                </div>
+            </div>
+            <div id="user-info" class="user-info" style="display: none;">
+                <span id="user-name"></span>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+        </header>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-section" class="section">
+            <h2>Login</h2>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="#" onclick="showRegister()">Register here</a></p>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-section" class="section" style="display: none;">
+            <h2>Register</h2>
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="register-name">Name:</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email:</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password:</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <button type="submit">Register</button>
+                <p>Already have an account? <a href="#" onclick="showLogin()">Login here</a></p>
+            </form>
+        </div>
+
+        <!-- Store Section -->
+        <div id="store-section" class="section" style="display: none;">
+            <div class="store-header">
+                <div>
+                    <h2>Our Premium Designs</h2>
+                    <p class="store-subtitle">Handcrafted designs for every style</p>
+                </div>
+                <div class="cart-icon" onclick="toggleCart()">
+                    <span class="cart-icon-symbol">🛒</span>
+                    <span>Cart</span>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </div>
+            </div>
+
+            <!-- Features Banner -->
+            <div class="features-banner">
+                <div class="feature-item">
+                    <span class="feature-icon">🚚</span>
+                    <span>Free Shipping</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✨</span>
+                    <span>Premium Quality</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎨</span>
+                    <span>Custom Designs</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💯</span>
+                    <span>100% Satisfaction</span>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="products-grid" class="products-grid"></div>
+
+            <!-- Cart Backdrop -->
+            <div id="cart-backdrop" class="cart-backdrop" onclick="toggleCart()"></div>
+
+            <!-- Cart Sidebar -->
+            <div id="cart-sidebar" class="cart-sidebar">
+                <div class="cart-header">
+                    <h3>Shopping Cart</h3>
+                    <button onclick="toggleCart()" class="close-cart">✕</button>
+                </div>
+                <div id="cart-items" class="cart-items"></div>
+                <div class="cart-footer">
+                    <button onclick="checkout()" class="checkout-btn" id="checkout-btn" disabled>Checkout</button>
+                </div>
+            </div>
+
+            <!-- Orders History -->
+            <div id="orders-list" class="orders-list">
+                <h3>My Orders</h3>
+                <div id="orders-container"></div>
+            </div>
+        </div>
+
+        <!-- Checkout Page -->
+        <div id="checkout-section" class="section" style="display: none;">
+            <div class="checkout-header">
+                <h2>Checkout</h2>
+                <button onclick="goBackToStore()" class="back-btn">← Back to Store</button>
+            </div>
+
+            <div class="checkout-content">
+                <div class="checkout-summary">
+                    <h3>Order Summary</h3>
+                    <div id="checkout-items"></div>
+                    <div class="checkout-total">
+                        <strong>Total Items: <span id="total-items">0</span></strong>
+                        <br>
+                        <strong>Total Cost: <span id="total-cost">0</span></strong>
+                        <br>
+                        <strong>After Tax Total Cost: <span id="total-cost-tax">0</span></strong>
+                    </div>
+                </div>
+
+                <div class="checkout-form">
+                    <h3>Confirm Order</h3>
+                    <p class="checkout-note">Review your items below and confirm to place your order.</p>
+                    <button onclick="placeOrder()" class="place-order-btn" id="place-order-btn">Place Order</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+
+        <!-- Message Display -->
+        <div id="message" class="message"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About Us</h4>
+                    <p>Creating premium custom t-shirts with unique designs since 2025. Quality you can trust.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" onclick="if(localStorage.getItem('token')) { const user = JSON.parse(localStorage.getItem('userInfo')); showStore(user); }">Shop</a></li>
+                        <li><a href="#" onclick="toggleCart()">Cart</a></li>
+                        <li><a href="#orders">Orders</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email1: M.V@edu.rtu.lv</p>
+                    <p>Email2: @edu.rtu.lv</p>
+                    <p>Email3: @edu.rtu.lv</p>
+                    <p>Email4: @edu.rtu.lv</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Custom T-Shirt Store. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

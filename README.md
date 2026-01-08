@@ -70,11 +70,11 @@ a
 ### Tehnologiju steks
 | a | b |
 |-------------------|----------------|
-| FrontEnd          | 100            |
+| FrontEnd          | Javascript     |
 | BackEnd           | PythonFlask    |
-| Datubāze          | google Sheets  |
-| Serveris          | Linux Ubunut   |
-| Versiju kontrole  | Github         |
+| Datubāze          | Google Sheets  |
+| Serveris          | Azure Web App  |
+| Versiju kontrole  | GitHub         |
 
 
 

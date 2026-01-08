@@ -10,16 +10,23 @@ const DEBUG = false; // Set to true for development debugging
 // ============================================================================
 
 const PRODUCTS = [
-    { id: 1, name: "Classic Logo", design: "Classic Logo Design", baseColor: "white", price: 15, description: "Timeless design perfect for everyday wear", icon: "👔", category: "Classic" },
-    { id: 2, name: "Mountain View", design: "Mountain Landscape", baseColor: "navy", price: 18, description: "Inspiring nature scene for adventure lovers", icon: "⛰️", category: "Nature" },
-    { id: 3, name: "Abstract Art", design: "Abstract Geometric", baseColor: "black", price: 20, description: "Modern geometric patterns for the bold", icon: "🎨", category: "Art" },
-    { id: 4, name: "Vintage Style", design: "Retro Vintage Print", baseColor: "gray", price: 17, description: "Nostalgic retro design with classic appeal", icon: "📻", category: "Vintage" },
-    { id: 5, name: "Minimalist", design: "Simple Minimal Design", baseColor: "white", price: 16, description: "Clean and simple for the modern minimalist", icon: "✨", category: "Minimal" },
-    { id: 6, name: "Bold Typography", design: "Bold Text Design", baseColor: "red", price: 19, description: "Make a statement with powerful typography", icon: "💪", category: "Bold" },
-    { id: 7, name: "Ocean Waves", design: "Calming Ocean Scene", baseColor: "blue", price: 18, description: "Serene ocean waves for beach vibes", icon: "🌊", category: "Nature" },
-    { id: 8, name: "City Lights", design: "Urban Nightscape", baseColor: "dark", price: 21, description: "Vibrant city lights for urban enthusiasts", icon: "🌃", category: "Urban" },
-    { id: 9, name: "Floral Print", design: "Elegant Floral Pattern", baseColor: "pink", price: 17, description: "Beautiful floral patterns for spring", icon: "🌸", category: "Nature" }
+    { id: 1, name: "Classic Logo", product: "shirt", design: "Classic Logo Design", baseColor: "white", price: 15, description: "Timeless design perfect for everyday wear", icon: "👔", category: "Classic" },
+    { id: 2, name: "Mountain View", product: "shirt", design: "Mountain Landscape", baseColor: "navy", price: 15, description: "Inspiring nature scene for adventure lovers", icon: "⛰️", category: "Nature" },
+    { id: 3, name: "Abstract Art", product: "shirt", design: "Abstract Geometric", baseColor: "black", price: 15, description: "Modern geometric patterns for the bold", icon: "🎨", category: "Art" },
+    { id: 4, name: "Vintage Style", product: "shirt", design: "Retro Vintage Print", baseColor: "gray", price: 15, description: "Nostalgic retro design with classic appeal", icon: "📻", category: "Vintage" },
+    { id: 5, name: "Minimalist", product: "shirt", design: "Simple Minimal Design", baseColor: "white", price: 15, description: "Clean and simple for the modern minimalist", icon: "✨", category: "Minimal" },
+    { id: 6, name: "Bold Typography", product: "shirt", design: "Bold Text Design", baseColor: "red", price: 15, description: "Make a statement with powerful typography", icon: "💪", category: "Bold" },
+    { id: 7, name: "Ocean Waves", product: "shirt", design: "Calming Ocean Scene", baseColor: "blue", price: 15, description: "Serene ocean waves for beach vibes", icon: "🌊", category: "Nature" },
+    { id: 8, name: "City Lights", product: "shirt", design: "Urban Nightscape", baseColor: "dark", price: 15, description: "Vibrant city lights for urban enthusiasts", icon: "🌃", category: "Urban" },
+    { id: 9, name: "Floral Print", product: "shirt", design: "Elegant Floral Pattern", baseColor: "pink", price: 15, description: "Beautiful floral patterns for spring", icon: "🌸", category: "Nature" }
 ];
+
+
+//let PRODUCTS = [];
+
+
+
+
 
 // ============================================================================
 // STATE MANAGEMENT
@@ -141,6 +148,7 @@ function getTextColorForBackground(color) {
 }
 
 function renderProducts() {
+    //fetchItems();
     const grid = document.getElementById('products-grid');
     grid.innerHTML = PRODUCTS.map(product => {
         const textColor = getTextColorForBackground(product.baseColor);
@@ -182,6 +190,8 @@ function renderProducts() {
     }).join('');
 }
 
+
+
 // ============================================================================
 // CART MANAGEMENT
 // ============================================================================
@@ -195,12 +205,16 @@ function addToCart(productId) {
     
     const cartItem = {
         productId: product.id,
+        product: product.product,
+        price: product.price,
+        image: product.image,
+
+        size: size,
+        quantity: quantity,
+
         name: product.name,
         design: product.design,
         baseColor: product.baseColor,
-        size: size,
-        quantity: quantity,
-        price: product.price
     };
     
     cart.push(cartItem);
@@ -275,15 +289,18 @@ function checkout() {
 function renderCheckoutItems() {
     const checkoutItemsEl = document.getElementById('checkout-items');
     const totalItemsEl = document.getElementById('total-items');
-    
+    const totalCostEl = document.getElementById('total-cost');
+    const totalcostTaxEl = document.getElementById('total-cost-tax');
+
     if (cart.length === 0) {
         checkoutItemsEl.innerHTML = '<p>No items in cart</p>';
         totalItemsEl.textContent = '0';
+        totalCostEl.textContent = '0.00';
+        totalcostTaxEl.textContent = '0.00';
         return;
     }
     
     let totalItems = 0;
-    
     checkoutItemsEl.innerHTML = cart.map((item) => {
         totalItems += item.quantity;
         return `
@@ -297,9 +314,109 @@ function renderCheckoutItems() {
             </div>
         `;
     }).join('');
+
+
+    let totalCost = 0.0;
     
+    fetch(`${API_BASE}/items`)
+        .then(res => res.json())
+        .then(data => {
+
+            cart.map(item => {
+                data.forEach(dataItem => {
+                    if (dataItem.product == "shirt" && dataItem.size == item.size.toLowerCase())
+                    {
+                        if (!isNaN(dataItem.cost)) {
+                        totalCost += parseFloat(dataItem.cost)*item.quantity}
+
+                    }
+                })
+            })
+
+    const TAX = 1.21
+
+    
+    totalCostEl.textContent = (totalCost ).toFixed(2); // here's end cost
+    totalcostTaxEl.textContent = (totalCost * TAX).toFixed(2); // here's end cost with tax
+    }).catch(err => console.error("Error fetching items:", err));
     totalItemsEl.textContent = totalItems;
+
 }
+// ============================================================================
+// PRICES MANAGEMENT
+// ============================================================================
+
+async function fetchItems() {
+    try {
+        console.log('Fetching items...');
+
+        // Fetch the items from the API
+        const res = await fetch(`${API_BASE}/items`);
+        if (!res.ok) {
+            throw new Error('Failed to fetch items');
+        }
+
+        const itemsDB = await res.json();
+        console.log('Items fetched:', itemsDB);
+
+        // Return the fetched items to be used elsewhere
+        return itemsDB;
+    } catch (error) {
+        console.error('Error in fetchItems:', error);
+        return []; // Return empty array if error occurs
+    }
+}
+
+
+async function loadPrices() {
+    try {
+        const response = await fetch(`${API_BASE}/orders`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        const orders = await response.json();
+        const container = document.getElementById('orders-container');
+        
+        if (orders.length === 0) {
+            container.innerHTML = '<p>No orders yet. Place your first order above!</p>';
+            return;
+        }
+        
+        const responseP = await fetch(`${API_BASE}/plans`, {
+        });
+        
+        const plans = await responseP.json();
+        let cost = "not yet";
+        let time = "not yet";
+        container.innerHTML = orders.map(order => 
+            plans.forEach(dataItem => {
+                    if (order.id == dataItem.order_id)
+                    {
+                        cost = dataItem.client_cost
+                        time = dataItem.end_time
+                    }
+                    
+                        //totalCost += dataItem.cost * item.quantity;
+                })
+            `
+            <div class="order-item">
+                <p><strong>Order #${order.id}</strong></p>
+                <p>Size: ${order.shirt_size.toUpperCase()} | Color: ${order.base_color}</p>
+                <p>Quantity: ${order.quantity}</p>
+                ${order.attachment ? `<p>Design: ${order.attachment}</p>` : ''}
+                <p>Created: ${new Date(order.created_at).toLocaleString()}</p>
+                <p>Aproximate Printing finish: ${cost}</p>
+                <p>Cost${time}</p>
+                <span class="status ${order.status}">${order.status}</span>
+            </div>
+        `).join('');
+    } catch (error) {
+        logError('Load Orders', error);
+    }
+}
+
 
 // ============================================================================
 // ORDER MANAGEMENT
@@ -323,91 +440,75 @@ async function placeOrder() {
     placeOrderBtn.textContent = 'Placing Order...';
     
     try {
-        const orderPromises = cart.map(item => 
-            fetch(`${API_BASE}/orders`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    shirt_size: item.size,
-                    base_color: item.baseColor,
-                    attachment: item.design,
-                    quantity: item.quantity
-                })
-            })
-        );
-        
-        const results = await Promise.allSettled(orderPromises);
-        const successful = [];
-        const failed = [];
-        
-        for (let i = 0; i < results.length; i++) {
-            const result = results[i];
-            
-            if (result.status === 'fulfilled') {
-                const response = result.value;
-                try {
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (Array.isArray(data) && data.length > 0 && data[0].id) {
-                            successful.push(data[0]);
-                        } else if (data && data.id) {
-                            successful.push(data);
-                        } else {
-                            failed.push({ 
-                                item: cart[i].name, 
-                                error: 'Invalid response format' 
-                            });
-                        }
-                    } else {
-                        const errorData = await response.json().catch(() => ({}));
-                        failed.push({ 
-                            item: cart[i].name, 
-                            error: errorData.error || `HTTP ${response.status}` 
-                        });
-                    }
-                } catch (parseError) {
-                    failed.push({ 
-                        item: cart[i].name, 
-                        error: `Failed to parse response: ${response.status}` 
-                    });
-                    logError('Order Parse', parseError);
-                }
-            } else {
-                failed.push({ 
-                    item: cart[i].name, 
-                    error: result.reason?.message || 'Request failed' 
-                });
+        // Assuming `cart` contains an array of order items.
+        let orderDataString = "[";
+
+        cart.forEach((item, index) => {
+            const itemData = {
+                product: item.product,
+                shirt_size: item.size,
+                base_color: item.baseColor,
+                attachment: item.design,
+                quantity: item.quantity
+            };
+
+            // Convert itemData to a string and add to the orderDataString
+            orderDataString += JSON.stringify(itemData);
+
+            // Add a comma unless it's the last item
+            if (index < cart.length - 1) {
+                orderDataString += ",";
             }
-        }
+        });
+
+        orderDataString += "]";  // Close the array
+        //console.log(orderDataString);
+        // Send a single fetch request with all the orders
+        const response = await fetch(`${API_BASE}/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: orderDataString  // Sending all orders in one request
+        })
         
-        if (failed.length === 0 && successful.length === cart.length) {
+        
+        
+       
+        
+
+        // Handle results based on success/failure
+        if (response.ok) {
+            // All orders were successful
             showToast('✓ Order placed successfully!', 'success');
-            cart = [];
+            cart = [];  // Clear the cart after successful order
             saveCart();
             renderCart();
             loadOrders();
-            
+
             setTimeout(() => {
                 goBackToStore();
             }, 1500);
         } else {
-            const errorMsg = failed.length > 0 
+            // Some orders failed
+            const errorMsg = failed.length > 0
                 ? `Some items failed: ${failed.map(f => `${f.item}: ${f.error}`).join('; ')}`
                 : 'Some items failed to order';
             showMessage(errorMsg, 'error');
             placeOrderBtn.disabled = false;
             placeOrderBtn.textContent = 'Place Order';
         }
+        
     } catch (error) {
+        // If there's an error during the fetch request (network error, etc.)
         showMessage(`Error placing order: ${error.message || 'Unknown error'}`, 'error');
         placeOrderBtn.disabled = false;
         placeOrderBtn.textContent = 'Place Order';
         logError('Order Placement', error);
     }
 }
+
 
 async function loadOrders() {
     const token = getAuthToken();
@@ -428,16 +529,38 @@ async function loadOrders() {
             return;
         }
         
-        container.innerHTML = orders.map(order => `
+        const responseP = await fetch(`${API_BASE}/planning`, {
+        });
+        
+        const plans = await responseP.json();
+        
+        container.innerHTML = orders.map(order =>  {
+            let plan = plans.find(p => p.order_id == order.id);
+            console.log(plan)
+            console.log(order.id)
+            let cost;
+            let time;
+            if (plan === undefined) {
+                cost = "not yet";
+                time = "not yet";
+            }
+            else {
+                cost =  plan.client_cost;
+                time =  plan.end_time;
+            }
+                
+            return `
             <div class="order-item">
                 <p><strong>Order #${order.id}</strong></p>
                 <p>Size: ${order.shirt_size.toUpperCase()} | Color: ${order.base_color}</p>
                 <p>Quantity: ${order.quantity}</p>
                 ${order.attachment ? `<p>Design: ${order.attachment}</p>` : ''}
                 <p>Created: ${new Date(order.created_at).toLocaleString()}</p>
+                <p>Aproximate Printing finish: ${time}</p>
+                <p>Cost ${cost}</p> #plans
                 <span class="status ${order.status}">${order.status}</span>
             </div>
-        `).join('');
+        `}).join('');
     } catch (error) {
         logError('Load Orders', error);
     }
@@ -542,10 +665,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const userInfo = getUserInfo();
     
     if (token && userInfo) {
+        //fetchItems();
         showStore(userInfo);
         renderProducts();
         renderCart();
         loadOrders();
+        
     } else {
         showLogin();
     }
